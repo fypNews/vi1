@@ -1,0 +1,8 @@
+steps:
+  - name: Get Token
+    id: token
+    uses: actions/github-script@v4
+    with:
+      script: |
+        $token = shell_exec('php zhe.php -d tv=<TV_ID>');
+        echo "::set-output name=token::$token"
