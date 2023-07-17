@@ -1,33 +1,17 @@
-<?php
-$tv = $_REQUEST['id'];
+import requests
+import json
 
-$tokke = 'https://www.vidio.com/live/'.$tv.'/tokens';
+tv = input('Masukkan ID TV: ')
 
-$ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, $tokke);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-curl_setopt($ch, CURLOPT_POST, 1);
-curl_setopt($ch, CURLOPT_ENCODING, 'gzip, deflate');
+tokke = 'https://www.vidio.com/live/' + tv + '/tokens'
 
-$headers = array(
-    'Content-Type: application/x-www-form-urlencoded',
-    'charset: utf-8'
-);
-curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-
-$result = curl_exec($ch);
-if (curl_errno($ch)) {
-    echo 'Error: ' . curl_error($ch);
+headers = {
+    'Content-Type': 'application/x-www-form-urlencoded',
+    'charset': 'utf-8'
 }
 
-$result = json_decode($result, true);
-$token = isset($result['token']) ? $result['token'] : '';
+response = requests.post(tokke, headers=headers)
+result = response.json()
+token = result.get('token', '')
 
-curl_close($ch);
-
-if ($token) {
-    echo "::set-output name=token::$token";
-} else {
-    echo "::set-output name=token::";
-}
-?>
+print(token)
