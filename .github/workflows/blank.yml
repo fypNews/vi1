@@ -10,33 +10,30 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
-      
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
         with:
-          php-version: '7.4'
+          python-version: '3.x' # Ganti 'x' dengan versi Python yang diinginkan
       
-      - name: Run PHP Script
-        uses: shyim/php-script@v2
-        with:
-          script: |
-            $tv = $_REQUEST['id'];
-            $tokke = 'https://www.vidio.com/live/' . $tv . '/tokens';
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $tokke);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_ENCODING, 'gzip, deflate');
-            $headers = array(
-              'Content-Type: application/x-www-form-urlencoded',
-              'charset: utf-8'
-            );
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-            $result = curl_exec($ch);
-            if (curl_errno($ch)) {
-              echo 'Error: ' . curl_error($ch);
-            }
-            $result = json_decode($result, true);
-            $token = isset($result['token']) ? $result['token'] : '';
-            curl_close($ch);
-            echo $token;
+      - name: Run Python Script
+        run: |
+          python -m pip install requests
+          python - << EOF
+          import requests
+          import json
+
+          tv = input('Masukkan ID TV: ')
+          tokke = 'https://www.vidio.com/live/{}/tokens'.format(tv)
+
+          headers = {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'charset': 'utf-8'
+          }
+
+          response = requests.post(tokke, headers=headers)
+          result = response.json()
+          token = result.get('token', '')
+
+          print(token)
+          EOF
