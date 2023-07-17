@@ -16,6 +16,11 @@ jobs:
         with:
           python-version: '3.x' # Ganti 'x' dengan versi Python yang diinginkan
 
+      - name: Set Environment Variable
+        run: echo "TV_ID=<ID_TV>" >> $GITHUB_ENV
+        env:
+          TV_ID: ${{ secrets.ID_TV }}
+
       - name: Install Dependencies
         run: python -m pip install requests
 
