@@ -23,7 +23,7 @@ jobs:
         env:
           TV_ID: 204
         run: |
-          python << EOF > live/204.json
+          python << EOF > token.txt
           import os
           import requests
           import json
@@ -46,3 +46,9 @@ jobs:
 
           print(token)
           EOF
+
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: vidio-token
+          path: live/204.json
