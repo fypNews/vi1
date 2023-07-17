@@ -1,7 +1,8 @@
+import os
 import requests
 import json
 
-tv = input('Masukkan ID TV: ')
+tv = os.environ['TV_ID']
 
 tokke = 'https://www.vidio.com/live/' + tv + '/tokens'
 
